@@ -18,6 +18,7 @@ ENV JENKINS_SLAVE_AGENT_PORT ${agent_port}
 ENV REF $REF
 ENV JENKINS_USER admin
 ENV JENKINS_PASS admin
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 
 # Jenkins is run with user `jenkins`, uid = 1000
 # If you bind mount a volume from the host or a data container,
@@ -83,6 +84,7 @@ COPY plugins.sh /usr/local/bin/plugins.sh
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 RUN  /usr/local/bin/plugins.sh /usr/share/jenkins/ref/plugins.txt 
+COPY security.groovy /usr/share/jenkins/ref/init.groovy.d/security.groovy
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup ${REF}/plugins from a support bundle
