@@ -54,7 +54,6 @@ google-login
 google-compute-engine
 google-storage-plugin
 google-kubernetes-engine
-#google-oauth
 google-play-android-publisher
 google-cloudbuild
 google-source-plugin
@@ -149,6 +148,7 @@ blueocean-i18n
 blueocean
 blueocean-autofavorite
 gitlab-plugin
+service-now
 
 
 
