@@ -39,7 +39,7 @@ apt install -y docker.io
 systemctl enable docker
 systemctl start docker
 docker pull jenkins
-docker run -d -p 8080:8080 -p 50000:50000 --name master-1 jenkins
+docker run -d -p 8080:8080 -p 50000:50000 --name master-1 docker pull willsgft/jenkins-master 
 wget https://raw.githubusercontent.com/eficode/wait-for/master/wait-for -P /tmp
 chmod +x /tmp/wait-for
 /bin/sh /tmp/wait-for localhost:8080 -t 90
@@ -50,13 +50,13 @@ echo $f > /tmp/checkf
 curl -k -H "Content-Type: application/json" -X POST -d '{"ip":"$i"}{"secret":"$f"} https://meeiot.org/put/58e6b7371ffe6c91c34560f0400a8f45212f370a0f863dee7ebf4a/jenkins
 SCRIPT
 
-  metadata {
+  metadata =  {
     sshKeys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
 }
 
 output "public_ip_master" {
-  value = ["${google_compute_instance.jenkins-master-1.*.network_interface.0.access_config.0.assigned_nat_ip}"]
+  value = ["${google_compute_instance.jenkins-master-1.*.network_interface.0.access_config.0.nat_ip}"]
 }
 
 ### To provision Jenkins Slave ###
@@ -94,11 +94,11 @@ secret=`cat /tmp/secret`
 docker run -d --name jenkins-slave1 jenkinsci/jnlp-slave -url http://$ipaddress:8080 $secret slave-1
 SCRIPT
 
-  metadata {
+  metadata = {
     sshKeys = "ubuntu:${file("~/.ssh/id_rsa.pub")}"
   }
 }
 
 output "public_ip_slave" {
-  value = ["${google_compute_instance.jenkins-slave-1.*.network_interface.0.access_config.0.assigned_nat_ip}"]
+  value = ["${google_compute_instance.jenkins-slave-1.*.network_interface.0.access_config.0.nat_ip}"]
 }

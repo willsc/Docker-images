@@ -19,6 +19,8 @@ ENV REF $REF
 ENV JENKINS_USER admin
 ENV JENKINS_PASS admin
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+#ENV JENKINS_UC_DOWNLOAD="http://mirrors.jenkins-ci.org"
+
 
 # Jenkins is run with user `jenkins`, uid = 1000
 # If you bind mount a volume from the host or a data container,
