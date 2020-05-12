@@ -38,7 +38,7 @@ apt install -y update
 apt install -y docker.io
 systemctl enable docker
 systemctl start docker
-docker pull jenkins
+docker pull willsgft/jenkins-master
 docker run -d -p 8080:8080 -p 50000:50000 --name master-1 docker pull willsgft/jenkins-master 
 wget https://raw.githubusercontent.com/eficode/wait-for/master/wait-for -P /tmp
 chmod +x /tmp/wait-for
