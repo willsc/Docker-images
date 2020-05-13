@@ -17,7 +17,7 @@ resource "google_compute_firewall" "www" {
 
 resource "google_compute_instance" "jenkins-master-1" {
   name = "jenkins-master-1"
-  machine_type = "f1-micro"
+  machine_type = "n1-standard-2"
   zone = "europe-west2-a"
   tags = ["jenkins"]
   boot_disk {
@@ -34,12 +34,18 @@ resource "google_compute_instance" "jenkins-master-1" {
   }
 
   metadata_startup_script = <<SCRIPT
-apt install -y update
-apt install -y docker.io
+touch /root/Build-started
+sudo apt-get remove docker docker-engine docker.io containerd runc
+sudo apt-get update
+sudo apt-get install  apt-transport-https ca-certificates  curl  gnupg-agent  software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository  "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+sudo apt-get update
+sudo apt-get install -y  docker-ce docker-ce-cli containerd.io
 systemctl enable docker
 systemctl start docker
-docker pull willsgft/jenkins-master
-docker run -d -p 8080:8080 -p 50000:50000 --name master-1 docker pull willsgft/jenkins-master 
+sudo docker pull willsgft/jenkins-master
+sudo docker run -d -p 8080:8080 -p 50000:50000 --name master-1  willsgft/jenkins-master 
 wget https://raw.githubusercontent.com/eficode/wait-for/master/wait-for -P /tmp
 chmod +x /tmp/wait-for
 /bin/sh /tmp/wait-for localhost:8080 -t 90
@@ -62,7 +68,7 @@ output "public_ip_master" {
 ### To provision Jenkins Slave ###
 resource "google_compute_instance" "jenkins-slave-1" {
   name = "jenkins-slave-1"
-  machine_type = "f1-micro"
+  machine_type = "n1-standard-2"
   zone = "europe-west2-a"
   tags = ["jenkins"]
   boot_disk {
@@ -79,11 +85,16 @@ resource "google_compute_instance" "jenkins-slave-1" {
   }
 
   metadata_startup_script = <<SCRIPT
-apt install -y update
-apt install -y docker.io
+sudo apt-get remove docker docker-engine docker.io containerd runc
+sudo apt-get update
+sudo apt-get install  apt-transport-https ca-certificates  curl  gnupg-agent  software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository  "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 systemctl enable docker
 systemctl start docker
-docker pull jenkinsci/jnlp-slave
+sudo docker pull jenkinsci/jnlp-slave
 sleep 120
 
 curl  https://meeiot.org/get/58e6b7371ffe6c91c34560f0400a8f45212f370a0f863dee7ebf4a/jenkins >> /tmp/jenkins.out
