@@ -23,6 +23,9 @@ spec:
       containers:
        - name: jenkins-master
          image: willsgft/jenkins-master:latest
+         securityContext:
+            privileged: true
+            runAsUser: 0
          imagePullPolicy: "Always"
          volumeMounts:
           - mountPath: /var
@@ -49,4 +52,5 @@ spec:
        - name: docker-sock-volume
          hostPath:
            path: /var/run/docker.sock
+           type: File
 status: {}
