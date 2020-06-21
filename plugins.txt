@@ -16,6 +16,7 @@ snakeyaml-api
 handlebars
 momentjs
 pubsub-light 
+kubernetes
 kubernetes-client-api
 kubernetes-credentials
 slack
@@ -39,6 +40,9 @@ docker-workflow
 durable-task
 external-monitor-job
 icon-shim 
+okhttp-api 
+config-file-provider
+h2-api
 oauth-credentials 
 htmlpublisher
 hashicorp-vault-plugin 
@@ -91,6 +95,7 @@ maven-plugin
 metrics
 mercurial
 pam-auth
+pipeline-maven
 pipeline-build-step
 pipeline-graph-analysis
 pipeline-input-step
